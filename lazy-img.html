@@ -2,7 +2,7 @@
 
 <!--
 `lazy-img`
-Lazy loading image
+Lazy loading img element, delays loading images until they come into the viewport
 
 @demo demo/index.html
 -->
@@ -48,16 +48,12 @@ Lazy loading image
         is: 'lazy-img',
 
         properties: {
-          /**
-           * image source
-           */
+          /** The source URL for the image */
           src: {
             type: String
           },
 
-          /**
-           * image alt attribute
-           */
+          /** The alt attribute for the image */
           alt: {
             type: String
           }

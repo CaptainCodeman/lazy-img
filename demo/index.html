@@ -22,14 +22,17 @@
       .centered {
         max-width: 640px;
       }
+      /**
+       * NOTE: these are the styles that actually apply, the style element
+       *       in the <demo-snippet> is just to show the animation effects
+       *       that can be applied for anyone viewing the demo
+       */
       lazy-img {
         width: 600px;
         height: 300px;
         --lazy-img: {
           opacity: 0;
           transform: scale(0.8);
-          background-color: #ccc;
-          border: 1px solid #ccc;
         }
         --lazy-img-loaded: {
           opacity: 1;
@@ -42,8 +45,24 @@
   <body>
     <div class="vertical-section-container centered">
       <h3>Basic lazy-img demo</h3>
+      <p>Open dev-tools and watch network requests to see lazy image requests</p>
       <demo-snippet>
         <template>
+          <style>
+            lazy-img {
+              width: 600px;
+              height: 300px;
+              --lazy-img: {
+                opacity: 0;
+                transform: scale(0.8);
+              }
+              --lazy-img-loaded: {
+                opacity: 1;
+                transform: scale(1.0);
+                transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
+              }
+            }
+          </style>
           <lazy-img src="1.jpeg" alt="Image 1"></lazy-img>
           <lazy-img src="2.jpeg" alt="Image 2"></lazy-img>
           <lazy-img src="3.jpeg" alt="Image 3"></lazy-img>
