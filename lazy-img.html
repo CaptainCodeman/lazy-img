@@ -4,7 +4,7 @@
 `lazy-img`
 Lazy loading image
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <script src="intersection-observer.js"></script>
@@ -35,7 +35,7 @@ Lazy loading image
   <script>
     (function() {
       'use strict';
-      
+
       var observer = new IntersectionObserver(function(entries){
         for(var i = 0; i < entries.length; i++) {
           var el = entries[i].target;
@@ -48,10 +48,16 @@ Lazy loading image
         is: 'lazy-img',
 
         properties: {
+          /**
+           * image source
+           */
           src: {
             type: String
           },
 
+          /**
+           * image alt attribute
+           */
           alt: {
             type: String
           }
