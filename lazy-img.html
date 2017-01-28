@@ -1,0 +1,83 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`lazy-img`
+Lazy loading image
+
+@demo demo/index.html 
+-->
+
+<script src="intersection-observer.js"></script>
+
+<dom-module id="lazy-img">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        overflow: hidden;
+        position: relative;
+      }
+
+      img {
+        display: block;
+        width: var(--lazy-img-width, auto);
+        height: var(--lazy-img-height, auto);
+        @apply(--lazy-img);
+      }
+
+      img.loaded {
+        @apply(--lazy-img-loaded);
+      }
+    </style>
+    <img id="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="[[alt]]">
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      var observer = new IntersectionObserver(function(entries){
+        for(var i = 0; i < entries.length; i++) {
+          var el = entries[i].target;
+          el._load();
+          observer.unobserve(el);
+        }
+      });
+
+      Polymer({
+        is: 'lazy-img',
+
+        properties: {
+          src: {
+            type: String
+          },
+
+          alt: {
+            type: String
+          }
+        },
+
+        _load: function() {
+          var img = this.$.img;
+          img.onload = function() {
+            img.classList.add('loaded');
+          };
+          img.src = this._resolveSrc(this.src);
+        },
+
+        _resolveSrc: function(testSrc) {
+          var baseURI = /** @type {string} */(this.ownerDocument.baseURI);
+          return (new URL(Polymer.ResolveUrl.resolveUrl(testSrc, baseURI), baseURI)).href;
+        },
+
+        attached: function() {
+          observer.observe(this);
+        },
+
+        detached: function() {
+          observer.unobserve(this);
+        },
+      });
+    })();
+  </script>
+</dom-module>

@@ -1,0 +1,32 @@
+{
+  "name": "lazy-img",
+  "version": "0.0.1",
+  "description": "Lazy loading img element",
+  "authors": [
+    "Simon Green <simon@captaincodeman.com>"
+  ],
+  "main": ";azy-img.html",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/github.com/CaptainCodeman/lazy-img.git"
+  },
+  "homepage": "http://captaincodeman.github.io/lazy-img/",
+  "keywords": [
+    "polymer",
+    "web-components",
+    "img",
+    "lazy",
+    "load",
+    "unveil"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "license": "MIT"
+}
