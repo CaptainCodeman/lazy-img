@@ -12,6 +12,12 @@
         dom: 'shadow',
         lazyRegister: true
       };
+
+      // Define polyfills for features that our app depends on:
+      window.PolyPoly = {
+        features: []
+      };
+      ('IntersectionObserver' in window) || window.PolyPoly.features.push('IntersectionObserver');
     </script>
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">

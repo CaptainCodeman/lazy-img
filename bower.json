@@ -5,7 +5,7 @@
   "authors": [
     "Simon Green <simon@captaincodeman.com>"
   ],
-  "main": ";azy-img.html",
+  "main": "lazy-img.html",
   "repository": {
     "type": "git",
     "url": "git://github.com/github.com/CaptainCodeman/lazy-img.git"
@@ -20,7 +20,8 @@
     "unveil"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "poly-poly": "CaptainCodeman/poly-poly#^0.0.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
