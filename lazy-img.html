@@ -90,7 +90,7 @@ Lazy loading img element, delays loading images until they come into the viewpor
           }
         });
 
-      }).catch(function(err) {
+      }, function() {
         console.log('error loading polyfills, IntersectionObserver may not be available')
       });
     })();
