@@ -1,6 +1,6 @@
 {
   "name": "lazy-img",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Lazy loading img element",
   "authors": [
     "Simon Green <simon@captaincodeman.com>"
@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
-    "poly-poly": "CaptainCodeman/poly-poly#^0.0.1"
+    "poly-poly": "CaptainCodeman/poly-poly#^0.0.3"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
