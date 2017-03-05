@@ -28,71 +28,183 @@ Lazy loading img element, delays loading images until they come into the viewpor
         @apply(--lazy-img-loaded);
       }
     </style>
-    <img id="img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="[[alt]]">
+    <img id="img" alt="[[alt]]">
   </template>
 
   <script>
     (function() {
       'use strict';
 
+      var elementObservers = new WeakMap();
+
+      function notifyEntries(entries){
+        for(var i = 0; i < entries.length; i++) {
+          entries[i].target._load();
+        }
+      }
+
+      var blankSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
       var polypoly = /** @type {!PolyPolyElement} */ document.createElement('poly-poly');
 
-      // We need the IntersectionObserver outside of the element so we
-      // wrap and delay the entire definition based on the promise in
-      // case it's being polyfilled asynchronously. If we only needed
-      // the promise within our element, we'd likely use the behavior
-      // version instead.
-      polypoly.completes.then(function() {
+      Polymer({
+        is: 'lazy-img',
 
-        var observer = new IntersectionObserver(function(entries){
-          for(var i = 0; i < entries.length; i++) {
-            entries[i].target._load();
+        properties: {
+          /** The source URL for the image */
+          src: {
+            type: String,
+            observer: '_onSrcChanged'
+          },
+
+          /** The alt attribute for the image */
+          alt: {
+            type: String
+          },
+
+          /** The root selector for the observer */
+          observe: {
+            type: String
+          },
+
+          /**
+            * The offset applied to the root's bounding_box when calculating
+            * intersections, effectively shrinking or growing the root for any
+            * calculation purposes. Supports pixels ('px') or percentages ('%').
+            */
+          margin: {
+            type: String,
+            value: '0px 0px 0px 0px'
+          },
+
+          /**
+            * The ratio of intersection needed to trigger loading. 0 means any
+            * pixel, 50 means 50% (half the image) needs to be within the root
+            * target, 100 means the image has to be completely within the view.
+            */
+          threshold: {
+            type: Number,
+            value: 0.0
           }
-        });
+        },
 
-        Polymer({
-          is: 'lazy-img',
+        /** cleanup observers when detached */
+        detached: function() {
+          this._stopObserving();
+        },
 
-          properties: {
-            /** The source URL for the image */
-            src: {
-              type: String
-            },
+        /** setting or changing the image src resets the state */
+        _onSrcChanged: function(src) {
+          this.$.img.src = blankSrc;
+          this._stopObserving();
+          Polymer.RenderStatus.afterNextRender(this, this._startObserving);
+        },
 
-            /** The alt attribute for the image */
-            alt: {
-              type: String
+        /** load the image, any loading effects will be provided by the css mixin */
+        _load: function() {
+          var img = this.$.img;
+          img.onload = function() {
+            img.classList.add('loaded');
+          };
+          img.src = this._resolveSrc(this.src);
+
+          this._stopObserving();
+        },
+
+        /** stop observing visibility changes to this element */
+        _stopObserving: function() {
+          if (this._observer) {
+            this._observer.unobserve(this);
+            if (--this._observer._lazyImgCount <= 0) {
+              this._deleteObserver(this._observer);
             }
-          },
-
-          _load: function() {
-            var img = this.$.img;
-            img.onload = function() {
-              img.classList.add('loaded');
-            };
-            img.src = this._resolveSrc(this.src);
-
-            // stop observing once loaded
-            observer.unobserve(this);
-          },
-
-          _resolveSrc: function(testSrc) {
-            var baseURI = /** @type {string} */(this.ownerDocument.baseURI);
-            return (new URL(Polymer.ResolveUrl.resolveUrl(testSrc, baseURI), baseURI)).href;
-          },
-
-          attached: function() {
-            observer.observe(this);
-          },
-
-          detached: function() {
-            observer.unobserve(this);
+            this._observer = null;
           }
-        });
+        },
 
-      }, function() {
-        console.log('error loading polyfills, IntersectionObserver may not be available')
+        /** start observing for this element becoming visible */
+        _startObserving: function() {
+          this._getObserver().then(function(observer) {
+            this._observer = observer;
+            this._observer.observe(this);
+            this._observer._lazyImgCount++;
+          }.bind(this));
+        },
+
+        /** resolve src image relative to original document, not this element */
+        _resolveSrc: function(testSrc) {
+          var baseURI = /** @type {string} */(this.ownerDocument.baseURI);
+          return (new URL(Polymer.ResolveUrl.resolveUrl(testSrc, baseURI), baseURI)).href;
+        },
+
+        /**
+         * get or create the observer for this element
+         *
+         * returns a promise so that IntersectionObserver
+         * can be polyfilled asynchronously and everything
+         * be wired up and created before that happens.
+         */
+        _getObserver: function() {
+          return new Promise(function(resolve, reject) {
+            polypoly.completes.then(function() {
+
+              var observer;
+
+              // get element based on selector if there is one
+              var el = this.observe ? this._getClosest() : document.documentElement;
+
+              var options = {
+                root: el,
+                margin: this.margin,
+                threshold: this.threshold
+              }
+
+              // See if there is already an observer created for the
+              // intersection options given. Note we perform a double
+              // lookup (map within a map) because the actual map key
+              // is a different instance and there is no hashing
+              var observersMap = elementObservers.get(el);
+              if (!observersMap) {
+                observersMap = new Map();
+                elementObservers.set(el, observersMap);
+              }
+
+              var key = options.margin + '/' + options.threshold;
+              observer = observersMap.get(key);
+              if (!observer) {
+                // first time for this observer options combination
+                observer = new IntersectionObserver(notifyEntries, options);
+                observer._lazyImgKey = key;
+                observer._lazyImgCount = 0;
+                observersMap.set(key, observer);
+              };
+
+              resolve(observer);
+
+            }.bind(this));
+          }.bind(this));
+        },
+
+        /** disconnect and delete an observer */
+        _deleteObserver: function(observer) {
+          var observersMap = elementObservers.get(observer.root);
+          if (observersMap) {
+            observersMap.delete(observer._lazyImgKey);
+            if (observersMap.size === 0) {
+              elementObservers.delete(observer.root);
+            }
+          }
+          observer.disconnect();
+        },
+
+        /** get the closest element with the given selector */
+        _getClosest: function() {
+          var el = this;
+          while (el.matches && !el.matches(this.observe)) el = el.parentNode;
+          return el.matches ? el : null;
+        }
       });
+
     })();
   </script>
 </dom-module>
