@@ -97,6 +97,12 @@ Lazy loading img element, delays loading images until they come into the viewpor
         _onSrcChanged: function(src) {
           this.$.img.src = blankSrc;
           this._stopObserving();
+
+          // why do we have this delay? well apart from the delay being the
+          // whole point of lazy loading images, it also helps if child nodes
+          // of a scroller are being repositioned in some way (e.g. by some
+          // layour element). Without this, the nodes might be immediately
+          // in view of the IntersectionObserver which would trigger loading.
           Polymer.RenderStatus.afterNextRender(this, this._startObserving);
         },
 
