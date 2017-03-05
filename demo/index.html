@@ -24,6 +24,7 @@
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../lazy-img.html">
 
+    <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
       .centered {
         max-width: 640px;
@@ -47,6 +48,7 @@
         }
       }
     </style>
+    </custom-style>
   </head>
   <body>
     <div class="vertical-section-container centered">
@@ -54,21 +56,6 @@
       <p>Open dev-tools and watch network requests to see lazy image requests</p>
       <demo-snippet>
         <template>
-          <style>
-            lazy-img {
-              width: 600px;
-              height: 300px;
-              --lazy-img: {
-                opacity: 0;
-                transform: scale(0.8);
-              }
-              --lazy-img-loaded: {
-                opacity: 1;
-                transform: scale(1.0);
-                transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
-              }
-            }
-          </style>
           <lazy-img src="1.jpeg" alt="Image 1"></lazy-img>
           <lazy-img src="2.jpeg" alt="Image 2"></lazy-img>
           <lazy-img src="3.jpeg" alt="Image 3"></lazy-img>

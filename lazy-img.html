@@ -21,11 +21,11 @@ Lazy loading img element, delays loading images until they come into the viewpor
         display: block;
         width: var(--lazy-img-width, auto);
         height: var(--lazy-img-height, auto);
-        @apply(--lazy-img);
+        @apply --lazy-img;
       }
 
       img.loaded {
-        @apply(--lazy-img-loaded);
+        @apply --lazy-img-loaded;
       }
     </style>
     <img id="img" alt="[[alt]]">
