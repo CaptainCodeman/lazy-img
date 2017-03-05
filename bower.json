@@ -1,6 +1,6 @@
 {
   "name": "lazy-img",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Lazy loading img element",
   "authors": [
     "Simon Green <simon@captaincodeman.com>"

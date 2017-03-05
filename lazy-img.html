@@ -157,7 +157,8 @@ Lazy loading img element, delays loading images until they come into the viewpor
               var observer;
 
               // get element based on selector if there is one
-              var el = this.observe ? this._getClosest() : document.documentElement;
+              var el = this.observe ? this._getClosest() : null;
+              var node = el || document.documentElement;
 
               var options = {
                 root: el,
@@ -169,10 +170,10 @@ Lazy loading img element, delays loading images until they come into the viewpor
               // intersection options given. Note we perform a double
               // lookup (map within a map) because the actual map key
               // is a different instance and there is no hashing
-              var observersMap = elementObservers.get(el);
+              var observersMap = elementObservers.get(node);
               if (!observersMap) {
                 observersMap = new Map();
-                elementObservers.set(el, observersMap);
+                elementObservers.set(node, observersMap);
               }
 
               var key = options.margin + '/' + options.threshold;
