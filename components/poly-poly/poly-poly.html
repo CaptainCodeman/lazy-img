@@ -1,0 +1,82 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+  (function() {
+    'use strict';
+
+    window.PolyPoly = window.PolyPoly || {};
+
+    // No, not a real promise, but good enough to provide a '.then' like
+    // delay / callback in case we're actually polyfilling actual Promises
+    var Promise = function() {
+      this.resolved = false;
+      this.rejected = false;
+      this.resolves = [];
+      this.rejects = [];
+    };
+
+    Promise.prototype.then = function(resolve, reject) {
+      if (this.resolved) resolve(); else this.resolves.push(resolve);
+      if (this.rejected) reject(); else this.rejects.push(reject);
+      return this;
+    };
+
+    Promise.prototype.resolve = function() {
+      this.resolved = true;
+      this.resolves.forEach(function(resolve) { resolve(); });
+    }
+
+    Promise.prototype.reject = function() {
+      this.rejected = true;
+      this.rejects.forEach(function(reject) { reject(); });
+    }
+
+    var loadedPromise = new Promise();
+
+    /**
+     * Polymer behavior to provide a promise that resolves when polyfilling is complete
+     *
+     * @polymerBehavior window.PolyPoly.Behavior
+     */
+    window.PolyPoly.Behavior = {
+      properties: {
+        completes: {
+          type: Object,
+          readOnly: true,
+          value: loadedPromise
+        }
+      },
+
+      registered: function() {
+        if (window.PolyPoly.features) {
+          if (window.PolyPoly.features.length) {
+            // Include a `ua` argument set to a supported browser to skip UA identification
+            // (improves response time) and avoid being treated as unknown UA (which would
+            // otherwise result in no polyfills, even with `always`, if UA is unknown)
+            var url = 'https://polyfill.io/v2/polyfill.min.js?features=' + window.PolyPoly.features.join(',') + '&flags=gated,always&ua=chrome/50';
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = url;
+            script.onload = loadedPromise.resolve.bind(loadedPromise);
+            script.onerror = loadedPromise.reject.bind(loadedPromise);
+            document.head.appendChild(script);
+          } else {
+            loadedPromise.resolve();
+          }
+        } else {
+          console.log("window.PolyPoly.features not defined - you might be using an element that requires polyfills");
+          loadedPromise.resolve();
+        }
+      }
+    }
+
+    /**
+     * poly-poly is an element that can be used to check the state of polyfill loading
+     */
+    Polymer({
+      is: 'poly-poly',
+      behaviors: [ window.PolyPoly.Behavior ]
+    });
+
+  })();
+</script>

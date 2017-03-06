@@ -1,0 +1,38 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../poly-poly.html">
+
+<dom-module id="x-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <poly-poly id="polypoly"></poly-poly>
+    <p>IntersectionObserver available: [[available]]</p>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'x-element',
+
+        properties: {
+          /** The source URL for the image */
+          available: {
+            type: Boolean
+          }
+        },
+
+        ready: function() {
+          this.$.polypoly.completes.then(function() {
+            this.available = ('IntersectionObserver' in window);
+          }.bind(this));
+        }
+      });
+
+    })();
+  </script>
+</dom-module>

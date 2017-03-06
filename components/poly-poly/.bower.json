@@ -1,0 +1,38 @@
+{
+  "name": "poly-poly",
+  "version": "0.0.4",
+  "description": "Polymer Polyfill Service Example",
+  "authors": [
+    "Simon Green <simon@captaincodeman.com>"
+  ],
+  "main": "poly-poly.html",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/github.com/CaptainCodeman/poly-poly.git"
+  },
+  "homepage": "http://captaincodeman.github.io/poly-poly/",
+  "keywords": [
+    "polymer",
+    "web-components",
+    "polyfills"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "license": "MIT",
+  "_release": "0.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.4",
+    "commit": "cb764c4d84b145230c7b5ba5bb3374a9123832c9"
+  },
+  "_source": "https://github.com/CaptainCodeman/poly-poly.git",
+  "_target": "^0.0.4",
+  "_originalSource": "CaptainCodeman/poly-poly"
+}

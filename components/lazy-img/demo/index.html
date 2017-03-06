@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>lazy-img demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script>
+      window.Polymer = {
+        dom: 'shadow',
+        lazyRegister: true
+      };
+
+      // Define polyfills for features that our app depends on:
+      window.PolyPoly = {
+        features: []
+      };
+      ('IntersectionObserver' in window) || window.PolyPoly.features.push('IntersectionObserver');
+    </script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../lazy-img.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+      .centered {
+        max-width: 640px;
+      }
+      /**
+       * NOTE: these are the styles that actually apply, the style element
+       *       in the <demo-snippet> is just to show the animation effects
+       *       that can be applied for anyone viewing the demo
+       */
+      lazy-img {
+        width: 600px;
+        height: 300px;
+        --lazy-img: {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        --lazy-img-loaded: {
+          opacity: 1;
+          transform: scale(1.0);
+          transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic lazy-img demo</h3>
+      <p>Open dev-tools and watch network requests to see lazy image requests</p>
+      <demo-snippet>
+        <template>
+          <style>
+            lazy-img {
+              width: 600px;
+              height: 300px;
+              --lazy-img: {
+                opacity: 0;
+                transform: scale(0.8);
+              }
+              --lazy-img-loaded: {
+                opacity: 1;
+                transform: scale(1.0);
+                transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
+              }
+            }
+          </style>
+          <lazy-img src="1.jpeg" alt="Image 1"></lazy-img>
+          <lazy-img src="2.jpeg" alt="Image 2"></lazy-img>
+          <lazy-img src="3.jpeg" alt="Image 3"></lazy-img>
+          <lazy-img src="4.jpeg" alt="Image 4"></lazy-img>
+          <lazy-img src="5.jpeg" alt="Image 5"></lazy-img>
+          <lazy-img src="6.jpeg" alt="Image 6"></lazy-img>
+          <lazy-img src="7.jpeg" alt="Image 7"></lazy-img>
+          <lazy-img src="8.jpeg" alt="Image 8"></lazy-img>
+          <lazy-img src="9.jpeg" alt="Image 9"></lazy-img>
+          <lazy-img src="10.jpeg" alt="Image 10"></lazy-img>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>
