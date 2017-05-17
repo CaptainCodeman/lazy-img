@@ -6,46 +6,36 @@
 
     <title>lazy-img demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script>
-      window.Polymer = {
-        dom: 'shadow',
-        lazyRegister: true
-      };
-
-      // Define polyfills for features that our app depends on:
-      window.PolyPoly = {
-        features: []
-      };
-      ('IntersectionObserver' in window) || window.PolyPoly.features.push('IntersectionObserver');
-    </script>
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../lazy-img.html">
+    <link rel="import" href="../lazy-img.html" async>
+    <link rel="import" href="x-images.html" async>
 
     <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
+      body {
+        background-color: #eee;
+      }
+
       .centered {
         max-width: 640px;
       }
-      /**
-       * NOTE: these are the styles that actually apply, the style element
-       *       in the <demo-snippet> is just to show the animation effects
-       *       that can be applied for anyone viewing the demo
-       */
+
       lazy-img {
+        display: inline-block;
         width: 600px;
         height: 300px;
-        --lazy-img: {
-          opacity: 0;
-          transform: scale(0.8);
-        }
-        --lazy-img-loaded: {
-          opacity: 1;
-          transform: scale(1.0);
-          transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
-        }
+        margin: 10px 0;
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      lazy-img[loaded] {
+        opacity: 1;
+        transform: scale(1.0);
+        transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
       }
     </style>
     </custom-style>
@@ -66,6 +56,13 @@
           <lazy-img src="8.jpeg" alt="Image 8"></lazy-img>
           <lazy-img src="9.jpeg" alt="Image 9"></lazy-img>
           <lazy-img src="10.jpeg" alt="Image 10"></lazy-img>
+        </template>
+      </demo-snippet>
+
+      <h3>dom-repeat within another element</h3>
+      <demo-snippet>
+        <template>
+          <x-images></x-images>
         </template>
       </demo-snippet>
     </div>

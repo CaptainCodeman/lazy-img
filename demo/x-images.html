@@ -1,0 +1,47 @@
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../lazy-img.html" async>
+
+<dom-module id="x-images">
+  <template>
+    <style>
+      :host {
+        max-width: 640px;
+      }
+      lazy-img {
+        width: 600px;
+        height: 300px;
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      lazy-img[loaded] {
+        opacity: 1;
+        transform: scale(1.0);
+        transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
+      }
+    </style>
+    <template is="dom-repeat" items="[[images]]" as="image">
+      <lazy-img src$="[[image.src]]" alt="[[image.alt]]"></lazy-img>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'x-images',
+      properties: {
+        images: {
+          type: Array,
+          value: function() {
+            var images = [];
+            for(var i = 1; i <= 10; i++) {
+              images.push({
+                src: i + '.jpeg',
+                alt: 'Image ' + i
+              });
+            }
+            return images;
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,13 @@
+{
+  "entrypoint": "test.html",
+  "fragments": [
+  ],
+  "sources": [
+    "src/lazy-img.js"
+  ],
+  "extraDependencies": [
+    "demo/*.jpeg",
+    "src/intersection-observer.js",
+    "bower_components/webcomponentsjs/webcomponents-*.js"
+  ]
+}

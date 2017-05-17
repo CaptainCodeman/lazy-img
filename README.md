@@ -2,7 +2,7 @@
 
 _[Demo and API docs](http://captaincodeman.github.io/lazy-img/)_
 
-# \<lazy-image\>
+# \<lazy-img\>
 
 `lazy-img` is a lazy loading img element that is shadow-dom friendly
 and uses [IntersectionObserver](https://developers.google.com/web/updates/2016/04/intersectionobserver)
@@ -12,12 +12,12 @@ The default behavior is to use the browser viewport but more specific control
 can be provided by setting the `observe` property to a parent selector (either
 an element id, class or tag name):
 
-```
+```html
 <div id="myscroller">
-        <lazy-img src="image1.jpg" observe="#myscroller"></lazy-img>
-        <lazy-img src="image2.jpg" observe="#myscroller"></lazy-img>
-        ...
-        <lazy-img src="image99.jpg" observe="#myscroller"></lazy-img>
+    <lazy-img src="image1.jpg" observe="#myscroller"></lazy-img>
+    <lazy-img src="image2.jpg" observe="#myscroller"></lazy-img>
+    ...
+    <lazy-img src="image99.jpg" observe="#myscroller"></lazy-img>
 <div>
 ```
 
@@ -29,15 +29,3 @@ Demo is based on [this example of intersection-observer](https://github.com/wils
 
 If used on a browser without support for `IntersectionObserver` a polyfill will be
 loaded automatically from the [polyfill.io service](https://polyfill.io/v2/docs/).
-
-Configure this with the following code in `index.html`:
-
-```
-<script>
-  // Define polyfills for features that our app depends on:
-  window.PolyPoly = {
-    features: []
-  };
-  ('IntersectionObserver' in window) || window.PolyPoly.features.push('IntersectionObserver');
-</script>
-```
