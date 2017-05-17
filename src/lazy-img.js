@@ -30,22 +30,22 @@ if ('IntersectionObserver' in window && 'IntersectionObserverEntry' in window &&
 class LazyImgElement extends HTMLElement {
 
   static get observedAttributes() {
-    return ['src', 'alt', 'margin', 'threshold', 'observe'];
+    return ['alt', 'src', 'margin', 'threshold', 'observe'];
   }
 
   constructor() {
     super();
 
     this.shadow = this.attachShadow({ mode: 'open' });
-    this.img = document.createElement('img');
-    this.img.style.width = '100%';
-    this.img.style.height = '100%';
-    this.img.src = blankSrc;
-    this.shadow.appendChild(this.img);
+    this._img = document.createElement('img');
+    this._img.style.width = '100%';
+    this._img.style.height = '100%';
+    this._img.src = blankSrc;
+    this.shadow.appendChild(this._img);
 
-    this.margin =  '0px 0px 0px 0px';
-    this.threshold = 0.10;
-    this.observe = null;
+    this._margin =  '0px 0px 0px 0px';
+    this._threshold = 0.10;
+    this._observe = null;
   }
 
   connectedCallback() {
@@ -58,60 +58,72 @@ class LazyImgElement extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) return;
-    switch (name) {
-      case 'alt':
-        this.img.alt = newValue;
-        break;
-      case 'src':
-        this.onSrcChanged(newValue);
-        break;
-      case 'margin':
-        this.margin = newValue;
-        break;
-      case 'threshold':
-        this.threshold = newValue;
-        break;
-      case 'observe':
-        this.observe = newValue;
-        break;
-    }
+    this[name] = newValue;
   }
 
-  /** setting or changing the image src resets the state */
-  onSrcChanged(src) {
+  get src() { return this._src; }
+  set src(value) {
     this.stopObserving();
     this.removeAttribute('loaded');
-    this._src = src;
-    this.img.src = blankSrc;
+    this._src = value;
+    this._img.src = blankSrc;
     this.startObserving();
+    this.setAttribute('src', value);
+  }
+
+  get alt() { return this._alt; }
+  set alt(value) {
+    this._alt = this._img.alt = value;
+    this.setAttribute('alt', value);
+  }
+
+  get margin() { return this._margin; }
+  set margin(value) {
+    this._margin = value;
+    this.setAttribute('margin', value);
+  }
+
+  get threshold() { return this._threshold; }
+  set threshold(value) {
+    this._threshold = value;
+    this.setAttribute('threshold', value);
+  }
+
+  get observe() { return this._observe; }
+  set observe(value) {
+    this._observe = value;
+    this.setAttribute('observe', value);
   }
 
   /** load the image */
   loadImage() {
-    this.img.onload = () => {
+    this._img.onload = () => {
       this.setAttribute('loaded', '');
+      var event = new Event('load');
+      event.detail = { originalTarget : this._img };
+      this.dispatchEvent(event);
     };
-    this.img.src = this._src;
+    this._img.src = this._src;
     this.stopObserving();
   }
 
   /** stop observing visibility changes to this element */
   stopObserving() {
-    if (this.observer) {
-      this.observer.unobserve(this);
-      if (--this.observer._lazyImgCount <= 0) {
-        this.deleteObserver(this.observer);
+    if (this._observer) {
+      this._observer.unobserve(this);
+      if (--this._observer._lazyImgCount <= 0) {
+        this.deleteObserver(this._observer);
       }
-      this.observer = null;
+      this._observer = null;
     }
   }
 
   /** start observing for this element becoming visible */
   startObserving() {
     this.getObserver().then(observer => {
-      this.observer = observer;
-      this.observer.observe(this);
-      this.observer._lazyImgCount++;
+      this._observer = observer;
+      this._observer.observe(this);
+      this._observer._lazyImgCount++;
     });
   }
 
@@ -127,13 +139,13 @@ class LazyImgElement extends HTMLElement {
       var observer;
 
       // get element based on selector if there is one
-      var el = this.observe ? this.getClosest() : null;
+      var el = this._observe ? this.getClosest() : null;
       var node = el || document.documentElement;
 
       var options = {
         root: el,
-        rootMargin: this.margin,
-        threshold: this.threshold
+        rootMargin: this._margin,
+        threshold: this._threshold
       }
       // See if there is already an observer created for the
       // intersection options given. Note we perform a double
@@ -174,7 +186,7 @@ class LazyImgElement extends HTMLElement {
   /** get the closest element with the given selector */
   getClosest() {
     var el = this;
-    while (el.host || (el.matches && !el.matches(this.observe)))
+    while (el.host || (el.matches && !el.matches(this._observe)))
       el = el.host || el.parentNode;
     return el.matches ? el : null;
   }
