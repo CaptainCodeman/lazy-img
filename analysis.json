@@ -1,0 +1,285 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "`lazy-img` is a lazy loading img element that is shadow-dom friendly and uses\n[IntersectionObserver](https://developers.google.com/web/updates/2016/04/intersectionobserver)\nto efficiently detect when images are within the selected viewport and need to\nbe loaded.\n\nThe default behavior is to use the browser viewport but more specific control\ncan be provided by setting the `observe` property to a parent selector (either\nan element id, class or tag name):\n\n```html\n<div id=\"myscroller\">\n  <lazy-img src=\"image1.jpg\" observe=\"#myscroller\"></lazy-img>\n  <lazy-img src=\"image2.jpg\" observe=\"#myscroller\"></lazy-img>\n  ...\n  <lazy-img src=\"image99.jpg\" observe=\"#myscroller\"></lazy-img>\n<div>\n```\n\n`margin` and `threshold` properties also allow control over exactly when loading\nis triggered as the element comes into view. `margin` can reduce or extend the\ndetection area of the container and `threshold` can determine what proportion of\nthe image needs to be within the area.\n\nIf used on a browser without support for `IntersectionObserver` a polyfill will\nbe loaded automatically.",
+      "summary": "",
+      "path": "src/lazy-img.js",
+      "properties": [],
+      "methods": [
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 83,
+              "column": 2
+            },
+            "end": {
+              "line": 85,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "disconnectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 87,
+              "column": 2
+            },
+            "end": {
+              "line": 89,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "attributeChangedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 91,
+              "column": 2
+            },
+            "end": {
+              "line": 94,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "name"
+            },
+            {
+              "name": "oldValue"
+            },
+            {
+              "name": "newValue"
+            }
+          ]
+        },
+        {
+          "name": "loadImage",
+          "description": "load the image",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 140,
+              "column": 2
+            },
+            "end": {
+              "line": 149,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "stopObserving",
+          "description": "stop observing visibility changes to this element",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 152,
+              "column": 2
+            },
+            "end": {
+              "line": 160,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "startObserving",
+          "description": "start observing for this element becoming visible",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 163,
+              "column": 2
+            },
+            "end": {
+              "line": 169,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "getObserver",
+          "description": "get or create the observer for this element\n\nreturns a promise so that IntersectionObserver\ncan be polyfilled asynchronously and everything\nbe wired up and created while that happens.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 178,
+              "column": 2
+            },
+            "end": {
+              "line": 213,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "deleteObserver",
+          "description": "disconnect and delete an observer",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 216,
+              "column": 2
+            },
+            "end": {
+              "line": 225,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "observer"
+            }
+          ]
+        },
+        {
+          "name": "getClosest",
+          "description": "get the closest element with the given selector",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 228,
+              "column": 2
+            },
+            "end": {
+              "line": 233,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "/components/lazy-img/demo/",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 62,
+          "column": 0
+        },
+        "end": {
+          "line": 234,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "name": "LazyImgElement",
+      "attributes": [
+        {
+          "name": "alt",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 65,
+              "column": 12
+            },
+            "end": {
+              "line": 65,
+              "column": 17
+            }
+          },
+          "metadata": {}
+        },
+        {
+          "name": "src",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 65,
+              "column": 19
+            },
+            "end": {
+              "line": 65,
+              "column": 24
+            }
+          },
+          "metadata": {}
+        },
+        {
+          "name": "margin",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 65,
+              "column": 26
+            },
+            "end": {
+              "line": 65,
+              "column": 34
+            }
+          },
+          "metadata": {}
+        },
+        {
+          "name": "threshold",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 65,
+              "column": 36
+            },
+            "end": {
+              "line": 65,
+              "column": 47
+            }
+          },
+          "metadata": {}
+        },
+        {
+          "name": "observe",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 65,
+              "column": 49
+            },
+            "end": {
+              "line": 65,
+              "column": 58
+            }
+          },
+          "metadata": {}
+        }
+      ],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "lazy-img"
+    }
+  ]
+}

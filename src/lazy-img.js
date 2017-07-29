@@ -1,5 +1,21 @@
 'use strict';
 
+let polyfillPromise;
+if ('IntersectionObserver' in window &&
+    'IntersectionObserverEntry' in window &&
+    'intersectionRatio' in IntersectionObserverEntry.prototype) {
+  polyfillPromise = Promise.resolve();
+} else {
+  const url = new URL('intersection-observer.js', document.currentScript.src);
+  polyfillPromise = new Promise(function(resolve, reject) {
+    var s = document.createElement("script");
+    s.src = url.href;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
 var elementObservers = new WeakMap();
 
 function notifyEntries(entries) {
@@ -11,22 +27,39 @@ function notifyEntries(entries) {
   }
 }
 
+// small blank image to use as placeholder
 const blankSrc = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-let polyfillPromise;
-if ('IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
-  polyfillPromise = Promise.resolve();
-} else {
-  const url = new URL('intersection-observer.js', document.currentScript.src);
-  polyfillPromise = new Promise(function(resolve, reject) {
-    var s = document.createElement("script");
-    s.src = url.href;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.documentElement.appendChild(s);
-  });
-}
-
+/**
+ * `lazy-img` is a lazy loading img element that is shadow-dom friendly and uses
+ * [IntersectionObserver](https://developers.google.com/web/updates/2016/04/intersectionobserver)
+ * to efficiently detect when images are within the selected viewport and need to
+ * be loaded.
+ *
+ * The default behavior is to use the browser viewport but more specific control
+ * can be provided by setting the `observe` property to a parent selector (either
+ * an element id, class or tag name):
+ *
+ * ```html
+ * <div id="myscroller">
+ *   <lazy-img src="image1.jpg" observe="#myscroller"></lazy-img>
+ *   <lazy-img src="image2.jpg" observe="#myscroller"></lazy-img>
+ *   ...
+ *   <lazy-img src="image99.jpg" observe="#myscroller"></lazy-img>
+ * <div>
+ * ```
+ *
+ * `margin` and `threshold` properties also allow control over exactly when loading
+ * is triggered as the element comes into view. `margin` can reduce or extend the
+ * detection area of the container and `threshold` can determine what proportion of
+ * the image needs to be within the area.
+ *
+ * If used on a browser without support for `IntersectionObserver` a polyfill will
+ * be loaded automatically.
+ *
+ * @customElement
+ * @demo /components/lazy-img/demo/
+ */
 class LazyImgElement extends HTMLElement {
 
   static get observedAttributes() {
@@ -61,6 +94,7 @@ class LazyImgElement extends HTMLElement {
     this[name] = newValue;
   }
 
+  /** image src. */
   get src() { return this._src; }
   set src(value) {
     this.stopObserving();
@@ -71,24 +105,32 @@ class LazyImgElement extends HTMLElement {
     this.setAttribute('src', value);
   }
 
+  /** image alt text. */
   get alt() { return this._alt; }
   set alt(value) {
     this._alt = this._img.alt = value;
     this.setAttribute('alt', value);
   }
 
+  /** margin to extend intersection observer. */
   get margin() { return this._margin; }
   set margin(value) {
     this._margin = value;
     this.setAttribute('margin', value);
   }
 
+  /**
+   * threshold for intersection observer - what
+   * percentage of the image needs to be visible
+   * to trigger loading.
+   */
   get threshold() { return this._threshold; }
   set threshold(value) {
     this._threshold = value;
     this.setAttribute('threshold', value);
   }
 
+  /** selector of the container element to observe. */
   get observe() { return this._observe; }
   set observe(value) {
     this._observe = value;

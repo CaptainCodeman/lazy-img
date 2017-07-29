@@ -1,6 +1,6 @@
 
-<link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../lazy-img.html" async>
+<link rel="import" href="../../polymer/polymer-element.html">
+  <link rel="import" href="../lazy-img.html" async>
 
 <dom-module id="x-images">
   <template>
@@ -25,23 +25,27 @@
     </template>
   </template>
   <script>
-    Polymer({
-      is: 'x-images',
-      properties: {
-        images: {
-          type: Array,
-          value: function() {
-            var images = [];
-            for(var i = 1; i <= 10; i++) {
-              images.push({
-                src: i + '.jpeg',
-                alt: 'Image ' + i
-              });
+    class XImages extends Polymer.Element {
+      static get is() { return 'x-images'; }
+      static get properties() {
+        return {
+          images: {
+            type: Array,
+            value: function() {
+              var images = [];
+              for(var i = 1; i <= 10; i++) {
+                images.push({
+                  src: i + '.jpeg',
+                  alt: 'Image ' + i
+                });
+              }
+              return images;
             }
-            return images;
           }
         }
       }
-    });
+    }
+
+    window.customElements.define(XImages.is, XImages);
   </script>
 </dom-module>
