@@ -1,3 +1,5 @@
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/CaptainCodemanlazy-img)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/CaptainCodemanlazy-img.svg)](https://vaadin.com/directory/component/CaptainCodemanlazy-img)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/CaptainCodeman/lazy-img)
 
 _[Demo and API docs](http://captaincodeman.github.io/lazy-img/)_
